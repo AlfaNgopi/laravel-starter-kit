@@ -1,0 +1,185 @@
+<x-layouts.app>
+    <div class="mb-6 flex items-center text-sm">
+        <a href="{{ route('dashboard') }}"
+            class="text-blue-600 dark:text-blue-400 hover:underline">{{ __('Dashboard') }}</a>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2 text-gray-400" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+        <span class="text-gray-500 dark:text-gray-400">{{ __('Roles') }}</span>
+    </div>
+
+    <div class="mb-6 flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Roles') }}</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('Manage roles and their permissions') }}</p>
+        </div>
+        <div class="flex gap-2">
+            @if(auth()->user()->hasPermission('download-roles'))
+                <a href="{{ route('roles.export') }}">
+                    <x-button type="secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        {{ __('Download Excel') }}
+                    </x-button>
+                </a>
+            @endif
+            @if(auth()->user()->hasPermission('create-roles'))
+                <a href="{{ route('roles.create') }}">
+                    <x-button type="primary">{{ __('Create Role') }}</x-button>
+                </a>
+            @endif
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div class="p-4">
+            <table id="roles-table" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Name') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Created') }}</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Actions') }}</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.tailwindcss.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#roles-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('roles.index') }}',
+                columns: [
+                    { data: 'name', name: 'name' },
+                    { data: 'created_at', name: 'created_at' },
+                    { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'text-right whitespace-nowrap' }
+                ],
+                order: [[1, 'desc']],
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search roles...",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ roles",
+                    infoEmpty: "No roles found",
+                    infoFiltered: "(filtered from _MAX_ total roles)",
+                    zeroRecords: "No matching roles found",
+                    emptyTable: "No roles available"
+                },
+                dom: '<"flex flex-col md:flex-row justify-between items-center mb-4"lf>rt<"flex flex-col md:flex-row justify-between items-center mt-4"ip>',
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                stripeClasses: ['bg-white dark:bg-gray-800', 'bg-gray-50 dark:bg-gray-900']
+            });
+        });
+    </script>
+
+    <style>
+        /* Table borders and styling */
+        #roles-table {
+            border-collapse: separate !important;
+            border-spacing: 0;
+        }
+        
+        #roles-table thead th {
+            border-bottom: 2px solid #e5e7eb;
+            background-color: #f9fafb;
+        }
+        
+        .dark #roles-table thead th {
+            border-bottom-color: #374151;
+            background-color: #1f2937;
+        }
+        
+        #roles-table tbody tr {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .dark #roles-table tbody tr {
+            border-bottom-color: #374151;
+        }
+        
+        /* Alternating row colors (striping) */
+        #roles-table tbody tr.odd {
+            background-color: #ffffff;
+        }
+        
+        #roles-table tbody tr.even {
+            background-color: #f9fafb;
+        }
+        
+        .dark #roles-table tbody tr.odd {
+            background-color: #1f2937;
+        }
+        
+        .dark #roles-table tbody tr.even {
+            background-color: #111827;
+        }
+        
+        #roles-table tbody tr:hover {
+            background-color: #e5e7eb !important;
+        }
+        
+        .dark #roles-table tbody tr:hover {
+            background-color: #374151 !important;
+        }
+        
+        #roles-table tbody td {
+            border-right: 1px solid #e5e7eb;
+            padding: 12px 24px;
+        }
+        
+        .dark #roles-table tbody td {
+            border-right-color: #374151;
+        }
+        
+        #roles-table tbody td:last-child {
+            border-right: none;
+        }
+        
+        #roles-table thead th {
+            border-right: 1px solid #e5e7eb;
+        }
+        
+        .dark #roles-table thead th {
+            border-right-color: #374151;
+        }
+        
+        #roles-table thead th:last-child {
+            border-right: none;
+        }
+        
+        /* Action links styling - keep inline */
+        #roles-table tbody td a,
+        #roles-table tbody td form {
+            display: inline;
+            white-space: nowrap;
+        }
+        
+        /* DataTables controls styling */
+        .dataTables_wrapper .dataTables_filter input,
+        .dataTables_wrapper .dataTables_length select {
+            @apply px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            @apply px-3 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 mx-1;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            @apply bg-blue-600 text-white border-blue-600;
+        }
+        
+        .dataTables_wrapper .dataTables_info {
+            @apply text-sm text-gray-600 dark:text-gray-400;
+        }
+    </style>
+</x-layouts.app>

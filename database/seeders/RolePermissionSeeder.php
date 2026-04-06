@@ -31,6 +31,14 @@ class RolePermissionSeeder extends Seeder
             'edit-permissions',
             'download-permissions',
             'delete-permissions',
+            // Baru Permissions untuk suppliers
+            'view-suppliers',
+            'show-suppliers',
+            'create-suppliers',
+            'edit-suppliers',
+            'download-suppliers',
+            'delete-suppliers',
+
         ];
 
         foreach ($permissions as $permissionName) {

@@ -18,6 +18,14 @@
                                     :active="request()->routeIs('permissions*')">Permissions</x-layouts.sidebar-two-level-link>
                             </x-layouts.sidebar-two-level-link-parent>
 
+
+                            
+
+                            <x-layouts.sidebar-link title="Supplier Management" icon="fas-truck" href="{{ route('suppliers.index') }}"
+                                :active="request()->routeIs('suppliers*')">Supplier Management
+                                
+                            </x-layouts.sidebar-link>
+
                             <x-layouts.sidebar-two-level-link-parent title="Example two level" icon="fas-house"
                                 :active="request()->routeIs('two-level*')">
                                 <x-layouts.sidebar-two-level-link href="#" icon='fas-house'

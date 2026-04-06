@@ -18,9 +18,13 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
+        // dd($request->headers->all());
+
         if ($request->ajax()) {
             $users = User::with('roles')->select('users.*');
-            
+
+            // dd($users);
+
             return DataTables::of($users)
                 ->addColumn('roles', function ($user) {
                     $badges = '';
@@ -31,22 +35,22 @@ class UserController extends Controller
                 })
                 ->addColumn('actions', function ($user) {
                     $actions = '';
-                    
+
                     if (auth()->user()->hasPermission('show-users')) {
                         $actions .= '<a href="' . route('users.show', $user) . '" class="text-green-600 dark:text-green-400 hover:underline mr-3">View</a>';
                     }
-                    
+
                     if (auth()->user()->hasPermission('edit-users')) {
                         $actions .= '<a href="' . route('users.edit', $user) . '" class="text-blue-600 dark:text-blue-400 hover:underline mr-3">Edit</a>';
                     }
-                    
+
                     if (auth()->user()->hasPermission('delete-users')) {
                         $actions .= '<form action="' . route('users.destroy', $user) . '" method="POST" class="inline" onsubmit="return confirm(\'Are you sure?\')">
                             ' . csrf_field() . method_field('DELETE') . '
                             <button type="submit" class="text-red-600 dark:text-red-400 hover:underline">Delete</button>
                         </form>';
                     }
-                    
+
                     return $actions;
                 })
                 ->editColumn('created_at', function ($user) {
@@ -97,7 +101,7 @@ class UserController extends Controller
     public function show(User $user): View
     {
         $user->load('roles.permissions');
-        
+
         return view('users.show', compact('user'));
     }
 
@@ -113,7 +117,7 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'password' => ['nullable', 'confirmed', Password::defaults()],
             'roles' => ['nullable', 'array'],
             'roles.*' => ['exists:roles,id'],

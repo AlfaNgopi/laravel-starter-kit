@@ -34,6 +34,28 @@ class AuthController extends Controller
         ]);
     }
 
+    public function loginJWT(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        $credentials = $request->only('email', 'password');
+
+        // auth('api')->attempt akan otomatis mengecek email/pass dan membuat JWT
+        if (!$token = auth('api')->attempt($credentials)) {
+            return response()->json(['error' => 'Login Gagal, Cek Email/Password'], 401);
+        }
+
+        return response()->json([
+            'access_token' => $token, 
+            'token_type' => 'bearer',
+            
+            'expires_in' => auth('api')->factory()->getTTL() * 60
+        ]);
+    }
+
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();

@@ -2,6 +2,9 @@
 
 return [
 
+    // Custom API Key for simple authentication (for testing/demo purposes only)
+    'api_key' => env('API_KEY'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

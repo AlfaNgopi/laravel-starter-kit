@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 * @var \App\Models\User $user 
 
 */
-/** @var \App\Models\User $user */
+/** @var \App\Models\User $auth()->user() */
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Supplier;

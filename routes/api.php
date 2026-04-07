@@ -25,7 +25,7 @@ Route::middleware(['middleware' => 'api_key'])->group(function () {
 
     // Protected routes (Need API Key AND valid JWT)
     Route::middleware('auth:api')->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::post('/logoutjwt', [AuthController::class, 'logoutJWT']);
         Route::get('/me', [UserController::class, 'me']);
         Route::get('/users', [UserController::class, 'index'])->middleware('role:admin');
 

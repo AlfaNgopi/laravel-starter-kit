@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 
 */
 /** @var \App\Models\User $auth()->user() */
+
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Supplier;
@@ -25,6 +27,9 @@ use Yajra\DataTables\Facades\DataTables;
 
 class SupplierController extends Controller
 {
+
+    
+
     public function index(Request $request)
     {
         // dd($request->headers->all());

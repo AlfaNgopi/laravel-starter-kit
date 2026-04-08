@@ -32,15 +32,15 @@ Route::middleware(['middleware' => 'api_key'])->group(function () {
 
         // CRUD Supplier
         // Suppliers Management - dengan permission check
-        Route::get('/suppliers', [SuppliersAPI::class, 'index'])->name('suppliers.index')->middleware('permission:view-suppliers');
+        Route::get('/suppliers', [SuppliersAPI::class, 'index'])->middleware('permission:view-suppliers');
         
 
-        Route::post('/suppliers-create', [SuppliersAPI::class, 'store'])->name('suppliers.store')->middleware('permission:create-suppliers');
+        Route::post('/suppliers-create', [SuppliersAPI::class, 'store'])->middleware('permission:create-suppliers');
 
-        Route::get('/suppliers/{supplier}', [SuppliersAPI::class, 'show'])->name('suppliers.show')->middleware('permission:show-suppliers');
+        Route::get('/suppliers/{supplier}', [SuppliersAPI::class, 'show'])->middleware('permission:show-suppliers');
         
-        Route::put('/suppliers-update/{supplier}', [SuppliersAPI::class, 'update'])->name('suppliers.update')->middleware('permission:edit-suppliers');
+        Route::put('/suppliers-update/{supplier}', [SuppliersAPI::class, 'update'])->middleware('permission:edit-suppliers');
 
-        Route::delete('/suppliers-delete/{supplier}', [SuppliersAPI::class, 'destroy'])->name('suppliers.destroy')->middleware('permission:delete-suppliers');
+        Route::delete('/suppliers-delete/{supplier}', [SuppliersAPI::class, 'destroy'])->middleware('permission:delete-suppliers');
     });
 });

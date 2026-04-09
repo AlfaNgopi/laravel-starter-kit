@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        
+
         if (config('database.default') === 'sqlite') {
             \Illuminate\Support\Facades\DB::statement('PRAGMA foreign_keys = ON;');
         }

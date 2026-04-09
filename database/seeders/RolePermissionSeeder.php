@@ -38,6 +38,9 @@ class RolePermissionSeeder extends Seeder
             'edit-suppliers',
             'download-suppliers',
             'delete-suppliers',
+            // Permissions untuk backup
+            'backup-backup',
+            'backup-restore',
 
         ];
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Settings;
@@ -64,6 +65,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('suppliers/{supplier}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit')->middleware('permission:edit-suppliers');
     Route::put('suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update')->middleware('permission:edit-suppliers');
     Route::delete('suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('suppliers.destroy')->middleware('permission:delete-suppliers');
+
+    //Backup and Restore - dengan permission check
+    Route::get('backup', [BackupController::class, 'backup'])->name('backup.backup')->middleware('permission:backup-backup');
+    Route::post('restore', [BackupController::class, 'restore'])->name('backup.restore')->middleware('permission:backup-restore');
 });
 
 require __DIR__.'/auth.php';
